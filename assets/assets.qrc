@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="icons">
+    <file>img/edit-clear.png</file>
+    <file>img/window-new.png</file>
+  </qresource>
+</RCC>
