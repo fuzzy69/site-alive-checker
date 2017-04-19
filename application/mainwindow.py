@@ -26,7 +26,7 @@ class MainWindow(QtWidgets.QMainWindow, ui):
         self._settingsFile = os.path.join(ROOT, "data", "settings.ini")
         self._threadPool = []
         self.sitesModel = QStandardItemModel()
-        self.sitesModel.setHorizontalHeaderLabels(["URL", "Result", "Status"])
+        self.sitesModel.setHorizontalHeaderLabels(["URL", "Result", "Code", "Status"])
         self.sitesTableView.setModel(self.sitesModel)
         self.startButton.clicked.connect(self.start)
         self.stopButton.clicked.connect(self.stop)
@@ -37,8 +37,6 @@ class MainWindow(QtWidgets.QMainWindow, ui):
         self.resizeEvent = self.onResize
         self.closeEvent = self.onClose
         self.showEvent = self.onShow
-        self.sitesTableView.setColumnWidth(0, int(self._tableViewWidth * 0.6))
-        self.sitesTableView.setColumnWidth(1, int(self._tableViewWidth * 0.2))
         self._threads = []
         self._workers = []
         self._progressDone = 0
@@ -85,7 +83,7 @@ class MainWindow(QtWidgets.QMainWindow, ui):
 
     def resizeTableColumns(self):
         self.sitesTableView.setColumnWidth(0, int(self.sitesTableView.frameGeometry().width() * 0.6))
-        self.sitesTableView.setColumnWidth(1, int(self.sitesTableView.frameGeometry().width() * 0.2))
+        self.sitesTableView.setColumnWidth(1, int(self.sitesTableView.frameGeometry().width() * 0.1))
 
     def start(self):
         model = self.sitesModel
@@ -114,18 +112,18 @@ class MainWindow(QtWidgets.QMainWindow, ui):
     @pyqtSlot(tuple)
     def onStatus(self, tuple_):
         i, status = tuple_
-        self.sitesModel.setData(self.sitesModel.index(i, 2), status)
+        self.sitesModel.setData(self.sitesModel.index(i, 3), status)
 
     @pyqtSlot(object)
     def onResult(self, result):
         self.sitesModel.item(result["row"], 1).setFont(self._boldFont)
         self.sitesModel.item(result["row"], 1).setForeground(Qt.white)
-        status_code = "({})".format(result["status_code"]) if result["status_code"] else ""
+        self.sitesModel.setData(self.sitesModel.index(result["row"], 2), result["status_code"])
         if result["result"]:
-            self.sitesModel.setData(self.sitesModel.index(result["row"], 1), "Yes {}".format(status_code))
+            self.sitesModel.setData(self.sitesModel.index(result["row"], 1), "OK")
             self.sitesModel.item(result["row"], 1).setBackground(Qt.green)
         else:
-            self.sitesModel.setData(self.sitesModel.index(result["row"], 1), "No {}".format(status_code))
+            self.sitesModel.setData(self.sitesModel.index(result["row"], 1), "Fail")
             self.sitesModel.item(result["row"], 1).setBackground(Qt.red)
         self._progressDone += 1
         self.progressBar.setValue(int(float(self._progressDone) / self._progressTotal * 100))
