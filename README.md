@@ -1,24 +1,24 @@
 # Site Alive Checker
 
-## About
+### About
 
 PyQt5 multithreaded application for checking http response status of urls.
 
-## Screenshot
+### Screenshot
 
 ![Screenshot](screenshots/main.jpg)
 
-## Requirements
+### Requirements
 
 Application is tested with python 3.5.2 version.
 
-### Aditional Python Libraries
+#### Aditional Python Libraries
 
 - [lxml](https://github.com/lxml/lxml/)
 - [requests](https://github.com/kennethreitz/requests)
 - [PyQt5](https://github.com/baoboa/pyqt5)
 
-## Installation
+### Installation
 
 ```
 git clone https://github.com/fuzzy69/site-alive-checker.git
@@ -29,7 +29,7 @@ pip install -r requirements.txt
 
 ```
 
-## Usage
+### Usage
 
 ```
 python main.py
