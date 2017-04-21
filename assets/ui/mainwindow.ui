@@ -114,6 +114,30 @@
      <height>29</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="importUrlsAction_2"/>
+    <addaction name="exportResultsAction"/>
+    <addaction name="separator"/>
+    <addaction name="quitAction"/>
+   </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <addaction name="clearTableAction_2"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="abouAction"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
@@ -145,6 +169,31 @@
    </property>
    <property name="text">
     <string>Clear URLs</string>
+   </property>
+  </action>
+  <action name="importUrlsAction_2">
+   <property name="text">
+    <string>Import URLs</string>
+   </property>
+  </action>
+  <action name="exportResultsAction">
+   <property name="text">
+    <string>Export results</string>
+   </property>
+  </action>
+  <action name="quitAction">
+   <property name="text">
+    <string>Quit</string>
+   </property>
+  </action>
+  <action name="clearTableAction_2">
+   <property name="text">
+    <string>Clear table</string>
+   </property>
+  </action>
+  <action name="abouAction">
+   <property name="text">
+    <string>About</string>
    </property>
   </action>
  </widget>
