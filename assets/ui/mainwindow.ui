@@ -133,7 +133,7 @@
     <property name="title">
      <string>Help</string>
     </property>
-    <addaction name="abouAction"/>
+    <addaction name="aboutAction"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -191,7 +191,7 @@
     <string>Clear table</string>
    </property>
   </action>
-  <action name="abouAction">
+  <action name="aboutAction">
    <property name="text">
     <string>About</string>
    </property>

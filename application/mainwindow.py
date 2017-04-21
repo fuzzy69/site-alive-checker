@@ -28,15 +28,24 @@ class MainWindow(QtWidgets.QMainWindow, ui):
         self.sitesModel = QStandardItemModel()
         self.sitesModel.setHorizontalHeaderLabels(["URL", "Result", "Code", "Status"])
         self.sitesTableView.setModel(self.sitesModel)
-        self.startButton.clicked.connect(self.start)
-        self.stopButton.clicked.connect(self.stop)
+        # Menubar
+        self.importUrlsAction_2.triggered.connect(self.importUrls)
+        self.exportResultsAction.triggered.connect(self.exportResults)
+        self.quitAction.triggered.connect(lambda: QtWidgets.QApplication.quit())
+        self.clearTableAction_2.triggered.connect(self.clearTable)
+        self.aboutAction.triggered.connect(self.about)
+        # Toolbar
         self.importUrlsAction.triggered.connect(self.importUrls)
         self.clearTableAction.triggered.connect(self.clearTable)
+        # Widgets
+        self.startButton.clicked.connect(self.start)
+        self.stopButton.clicked.connect(self.stop)
         self.sitesTableView.doubleClicked.connect(self.sitesTableView_doubleClicked)
-        self._tableViewWidth = 0
+        # Events
         self.resizeEvent = self.onResize
         self.closeEvent = self.onClose
         self.showEvent = self.onShow
+        self._tableViewWidth = 0
         self._threads = []
         self._workers = []
         self._progressDone = 0
@@ -147,3 +156,9 @@ class MainWindow(QtWidgets.QMainWindow, ui):
     def tableRemoveAllRows(self, model):
         for i in reversed(range(model.rowCount())):
             model.removeRow(i)
+
+    def exportResults(self):
+        pass
+
+    def about(self):
+        pass
