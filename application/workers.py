@@ -18,9 +18,11 @@ class Worker(QObject):
         self._args = args
         self._kwargs = kwargs
         self.start.connect(self.run)
+        self._running = False
 
     @pyqtSlot()
     def run(self):
+        self._running = True
         result = self.doWork(*self._args, **self._kwargs)
         self.finished.emit()
 
@@ -33,7 +35,7 @@ class CheckAliveWorker(Worker):
     def doWork(self, *args, **kwargs):
         queue = kwargs["queue"]
         timeout = kwargs["timeout"]
-        while not queue.empty():
+        while self._running and not queue.empty():
             row, url = queue.get()
             self.status.emit((row, "Checking ..."))
             status_code, msg = check_alive(url, timeout)

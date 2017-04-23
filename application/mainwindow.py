@@ -116,7 +116,8 @@ class MainWindow(QtWidgets.QMainWindow, ui):
             self._threads[i].start()
 
     def stop(self):
-        pass
+        for i, _ in enumerate(self._workers):
+            self._workers[i]._running = False
 
     @pyqtSlot(tuple)
     def onStatus(self, tuple_):
