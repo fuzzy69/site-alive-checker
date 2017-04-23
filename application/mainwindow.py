@@ -143,7 +143,11 @@ class MainWindow(QtWidgets.QMainWindow, ui):
         if filePath:
             text = readTextFile(filePath)
             for url in text.strip().splitlines():
-                self.sitesModel.appendRow([QStandardItem(url), QStandardItem(""),QStandardItem("")])
+                resultCell = QStandardItem("")
+                resultCell.setTextAlignment(Qt.AlignCenter)
+                codeCell = QStandardItem("")
+                codeCell.setTextAlignment(Qt.AlignCenter)
+                self.sitesModel.appendRow([QStandardItem(url), resultCell, codeCell])
 
     def sitesTableView_doubleClicked(self, modelIndex):
         model = self.sitesModel
