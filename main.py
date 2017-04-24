@@ -13,6 +13,7 @@ __title__ = "Site Alive Checker"
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
+    app.setStyleSheet("QStatusBar::item { border: 0px solid black };");
     mainWindow = MainWindow(title=__title__)
     mainWindow.show()
     app.exec_()

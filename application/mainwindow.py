@@ -14,7 +14,7 @@ from .defaults import THREADS, TIMEOUT
 from .helpers import readTextFile
 from .utils import check_alive, split_list
 from .version import __version__
-from .workers import Worker, CheckAliveWorker
+from .workers import Worker, CheckAliveWorker, MyThread
 
 ui = uic.loadUiType(os.path.join(ROOT, "assets", "ui", "mainwindow.ui"))[0]
 
@@ -40,13 +40,18 @@ class MainWindow(QtWidgets.QMainWindow, ui):
         # Widgets
         self.startButton.clicked.connect(self.start)
         self.stopButton.clicked.connect(self.stop)
+        self.buttonTest.clicked.connect(self.test)
         self.sitesTableView.doubleClicked.connect(self.sitesTableView_doubleClicked)
+        # Statusbar
+        self.labelActiveThreads = QtWidgets.QLabel("Active threads: 0")
+        self.statusbar.addPermanentWidget(self.labelActiveThreads)
         # Events
         self.resizeEvent = self.onResize
         self.closeEvent = self.onClose
         self.showEvent = self.onShow
         self._tableViewWidth = 0
         self._threads = []
+        self._activeThreads = 0
         self._workers = []
         self._progressDone = 0
         self._progressTotal = 0
@@ -54,6 +59,18 @@ class MainWindow(QtWidgets.QMainWindow, ui):
         self._boldFont.setBold(True)
         self.loadSettings()
         self.centerWindow()
+        self.timerPulse = QTimer(self)
+        self.timerPulse.timeout.connect(self.pulse)
+        self.timerPulse.start(1000)
+        # text = readTextFile("data/sites2.txt")
+        # for url in text.strip().splitlines():
+        #     resultCell = QStandardItem("")
+        #     resultCell.setTextAlignment(Qt.AlignCenter)
+        #     codeCell = QStandardItem("")
+        #     codeCell.setTextAlignment(Qt.AlignCenter)
+        #     self.sitesModel.appendRow([QStandardItem(url), resultCell, codeCell])
+        self.stopButton.setEnabled(False)
+        self.buttonTest.setVisible(False)
 
     def centerWindow(self):
         fg = self.frameGeometry()
@@ -95,11 +112,15 @@ class MainWindow(QtWidgets.QMainWindow, ui):
         self.sitesTableView.setColumnWidth(1, int(self.sitesTableView.frameGeometry().width() * 0.1))
 
     def start(self):
+        self.resetTable()
         model = self.sitesModel
         queues = split_list(range(self.sitesModel.rowCount()), self.threadsSpin.value())
         self._progressTotal = self.sitesModel.rowCount()
+        self._progressDone = 0
+        self._threads = []
+        self._workers = []
         for i, rows in enumerate(queues):
-            self._threads.append(QThread())
+            self._threads.append(MyThread())
             queue = Queue()
             for row in rows:
                 url = model.data(model.index(row, 0))
@@ -114,6 +135,19 @@ class MainWindow(QtWidgets.QMainWindow, ui):
             self._workers[i].finished.connect(self._workers[i].deleteLater)
         for i in range(self.threadsSpin.value()):
             self._threads[i].start()
+        self.startButton.setEnabled(False)
+        self.stopButton.setEnabled(True)
+
+    def setActiveThreadsCount(self, i):
+        self._activeThreads = i
+
+    def pulse(self):
+        print("threads: " +str(MyThread.activeCount))
+        self.labelActiveThreads.setText("Active threads: {}".format(MyThread.activeCount))
+        if MyThread.activeCount == 0 and not self.startButton.isEnabled():
+            self.startButton.setEnabled(True)
+        if MyThread.activeCount == 0 and self.stopButton.isEnabled():
+            self.stopButton.setEnabled(False)
 
     def stop(self):
         for i, _ in enumerate(self._workers):
@@ -127,14 +161,14 @@ class MainWindow(QtWidgets.QMainWindow, ui):
     @pyqtSlot(object)
     def onResult(self, result):
         self.sitesModel.item(result["row"], 1).setFont(self._boldFont)
-        self.sitesModel.item(result["row"], 1).setForeground(Qt.white)
+        # self.sitesModel.item(result["row"], 1).setForeground(Qt.white)
         self.sitesModel.setData(self.sitesModel.index(result["row"], 2), result["status_code"])
         if result["result"]:
             self.sitesModel.setData(self.sitesModel.index(result["row"], 1), "OK")
-            self.sitesModel.item(result["row"], 1).setBackground(Qt.green)
+            self.sitesModel.item(result["row"], 1).setForeground(Qt.green)
         else:
             self.sitesModel.setData(self.sitesModel.index(result["row"], 1), "Fail")
-            self.sitesModel.item(result["row"], 1).setBackground(Qt.red)
+            self.sitesModel.item(result["row"], 1).setForeground(Qt.red)
         self._progressDone += 1
         self.progressBar.setValue(int(float(self._progressDone) / self._progressTotal * 100))
 
@@ -155,6 +189,12 @@ class MainWindow(QtWidgets.QMainWindow, ui):
         url = model.data(model.index(row, 0))
         webbrowser.open(url)
 
+    def resetTable(self):
+        model = self.sitesModel
+        for i in range(model.rowCount()):
+            model.setData(model.index(i, 1), "")
+            model.setData(model.index(i, 2), "")
+
     def clearTable(self):
         self.tableRemoveAllRows(self.sitesModel)
 
@@ -166,4 +206,7 @@ class MainWindow(QtWidgets.QMainWindow, ui):
         pass
 
     def about(self):
+        pass
+
+    def test(self):
         pass
