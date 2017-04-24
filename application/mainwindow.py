@@ -142,12 +142,18 @@ class MainWindow(QtWidgets.QMainWindow, ui):
         self._activeThreads = i
 
     def pulse(self):
-        print("threads: " +str(MyThread.activeCount))
+        # print("threads: " +str(MyThread.activeCount))
         self.labelActiveThreads.setText("Active threads: {}".format(MyThread.activeCount))
-        if MyThread.activeCount == 0 and not self.startButton.isEnabled():
-            self.startButton.setEnabled(True)
-        if MyThread.activeCount == 0 and self.stopButton.isEnabled():
-            self.stopButton.setEnabled(False)
+        if MyThread.activeCount == 0:
+            if not self.sitesTableView.isSortingEnabled():
+                self.sitesTableView.setSortingEnabled(True)
+            if not self.startButton.isEnabled():
+                self.startButton.setEnabled(True)
+            if self.stopButton.isEnabled():
+                self.stopButton.setEnabled(False)
+        else:
+            if self.sitesTableView.isSortingEnabled():
+                self.sitesTableView.setSortingEnabled(False)
 
     def stop(self):
         for i, _ in enumerate(self._workers):
