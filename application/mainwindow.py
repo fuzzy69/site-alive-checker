@@ -30,21 +30,15 @@ class MainWindow(QtWidgets.QMainWindow, ui):
         self.sitesModel = QStandardItemModel()
         self.sitesModel.setHorizontalHeaderLabels(["URL", "Result", "Code", "Status"])
         self.sitesTableView.setModel(self.sitesModel)
-        # Menubar
-        self.importUrlsAction_2.triggered.connect(self.importUrls)
+        self.importUrlsAction.triggered.connect(self.importUrls)
         self.exportResultsAction.triggered.connect(self.exportResults)
         self.quitAction.triggered.connect(lambda: QtWidgets.QApplication.quit())
-        self.clearTableAction_2.triggered.connect(self.clearTable)
-        self.aboutAction.triggered.connect(self.about)
-        # Toolbar
-        self.importUrlsAction.triggered.connect(self.importUrls)
         self.clearTableAction.triggered.connect(self.clearTable)
-        # Widgets
+        self.aboutAction.triggered.connect(self.about)
         self.startButton.clicked.connect(self.start)
         self.stopButton.clicked.connect(self.stop)
         self.buttonTest.clicked.connect(self.test)
         self.sitesTableView.doubleClicked.connect(self.sitesTableView_doubleClicked)
-        # Statusbar
         self.labelActiveThreads = QtWidgets.QLabel("Active threads: 0")
         self.statusbar.addPermanentWidget(self.labelActiveThreads)
         # Events

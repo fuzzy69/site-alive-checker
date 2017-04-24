@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../assets.qrc">
+    <normaloff>:/icons/img/network-idle.png</normaloff>:/icons/img/network-idle.png</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
@@ -91,12 +95,20 @@
         <property name="text">
          <string>Start</string>
         </property>
+        <property name="icon">
+         <iconset resource="../assets.qrc">
+          <normaloff>:/icons/img/media-playback-start.png</normaloff>:/icons/img/media-playback-start.png</iconset>
+        </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="stopButton">
         <property name="text">
          <string>Stop</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../assets.qrc">
+          <normaloff>:/icons/img/media-playback-stop.png</normaloff>:/icons/img/media-playback-stop.png</iconset>
         </property>
        </widget>
       </item>
@@ -131,7 +143,7 @@
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="importUrlsAction_2"/>
+    <addaction name="importUrlsAction"/>
     <addaction name="exportResultsAction"/>
     <addaction name="separator"/>
     <addaction name="quitAction"/>
@@ -140,7 +152,7 @@
     <property name="title">
      <string>Edit</string>
     </property>
-    <addaction name="clearTableAction_2"/>
+    <addaction name="clearTableAction"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -164,15 +176,39 @@
     <bool>false</bool>
    </attribute>
    <addaction name="importUrlsAction"/>
+   <addaction name="exportResultsAction"/>
+   <addaction name="separator"/>
    <addaction name="clearTableAction"/>
+   <addaction name="separator"/>
+   <addaction name="aboutAction"/>
+   <addaction name="separator"/>
+   <addaction name="quitAction"/>
   </widget>
   <action name="importUrlsAction">
    <property name="icon">
     <iconset resource="../assets.qrc">
-     <normaloff>:/icons/img/window-new.png</normaloff>:/icons/img/window-new.png</iconset>
+     <normaloff>:/icons/img/document-open.png</normaloff>:/icons/img/document-open.png</iconset>
    </property>
    <property name="text">
     <string>Import URLs</string>
+   </property>
+  </action>
+  <action name="exportResultsAction">
+   <property name="icon">
+    <iconset resource="../assets.qrc">
+     <normaloff>:/icons/img/document-save.png</normaloff>:/icons/img/document-save.png</iconset>
+   </property>
+   <property name="text">
+    <string>Export results</string>
+   </property>
+  </action>
+  <action name="quitAction">
+   <property name="icon">
+    <iconset resource="../assets.qrc">
+     <normaloff>:/icons/img/system-log-out.png</normaloff>:/icons/img/system-log-out.png</iconset>
+   </property>
+   <property name="text">
+    <string>Quit</string>
    </property>
   </action>
   <action name="clearTableAction">
@@ -181,30 +217,14 @@
      <normaloff>:/icons/img/edit-clear.png</normaloff>:/icons/img/edit-clear.png</iconset>
    </property>
    <property name="text">
-    <string>Clear URLs</string>
-   </property>
-  </action>
-  <action name="importUrlsAction_2">
-   <property name="text">
-    <string>Import URLs</string>
-   </property>
-  </action>
-  <action name="exportResultsAction">
-   <property name="text">
-    <string>Export results</string>
-   </property>
-  </action>
-  <action name="quitAction">
-   <property name="text">
-    <string>Quit</string>
-   </property>
-  </action>
-  <action name="clearTableAction_2">
-   <property name="text">
     <string>Clear table</string>
    </property>
   </action>
   <action name="aboutAction">
+   <property name="icon">
+    <iconset resource="../assets.qrc">
+     <normaloff>:/icons/img/help-browser.png</normaloff>:/icons/img/help-browser.png</iconset>
+   </property>
    <property name="text">
     <string>About</string>
    </property>

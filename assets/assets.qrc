@@ -1,5 +1,15 @@
 <RCC>
   <qresource prefix="icons">
+    <file>img/network-idle.png</file>
+    <file>img/document-open.png</file>
+    <file>img/document-save.png</file>
+    <file>img/edit-clear.png</file>
+    <file>img/help-browser.png</file>
+    <file>img/media-playback-pause.png</file>
+    <file>img/media-playback-start.png</file>
+    <file>img/media-playback-stop.png</file>
+    <file>img/system-log-out.png</file>
+    <file>img/window-new.png</file>
     <file>img/edit-clear.png</file>
     <file>img/window-new.png</file>
   </qresource>
