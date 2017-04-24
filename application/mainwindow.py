@@ -2,14 +2,16 @@
 # !/usr/bin/env python
 
 import os
+import platform
 import webbrowser
 from queue import Queue
 
 from PyQt5 import uic, QtWidgets
-from PyQt5.QtCore import (Qt, QSettings, QThread, QTimer, pyqtSlot, pyqtSignal)
+from PyQt5.QtCore import (Qt, QSettings, QThread, QTimer, pyqtSlot, pyqtSignal,
+    QT_VERSION_STR, PYQT_VERSION_STR)
 from PyQt5.QtGui import (QFont, QStandardItem, QStandardItemModel)
 
-from .conf import ROOT
+from .conf import ROOT, __author__, __description__, __title__
 from .defaults import THREADS, TIMEOUT
 from .helpers import readTextFile
 from .utils import check_alive, split_list
@@ -19,10 +21,10 @@ from .workers import Worker, CheckAliveWorker, MyThread
 ui = uic.loadUiType(os.path.join(ROOT, "assets", "ui", "mainwindow.ui"))[0]
 
 class MainWindow(QtWidgets.QMainWindow, ui):
-    def __init__(self, parent=None, title=""):
+    def __init__(self, parent=None):
         QtWidgets.QMainWindow.__init__(self, parent)
         self.setupUi(self)
-        self.setWindowTitle("{} {}".format(title, __version__))
+        self.setWindowTitle("{} - {}".format(__title__, __version__))
         self._settingsFile = os.path.join(ROOT, "data", "settings.ini")
         self._threadPool = []
         self.sitesModel = QStandardItemModel()
@@ -57,6 +59,7 @@ class MainWindow(QtWidgets.QMainWindow, ui):
         self._progressTotal = 0
         self._boldFont = QFont()
         self._boldFont.setBold(True)
+        self._recentFIles = []
         self.loadSettings()
         self.centerWindow()
         self.timerPulse = QTimer(self)
@@ -65,7 +68,7 @@ class MainWindow(QtWidgets.QMainWindow, ui):
         # text = readTextFile("data/sites2.txt")
         # for url in text.strip().splitlines():
         #     resultCell = QStandardItem("")
-        #     resultCell.setTextAlignment(Qt.AlignCenter)
+        #     resultCell.setTextAlignment(Qt.AlignCeter)
         #     codeCell = QStandardItem("")
         #     codeCell.setTextAlignment(Qt.AlignCenter)
         #     self.sitesModel.appendRow([QStandardItem(url), resultCell, codeCell])
@@ -212,7 +215,15 @@ class MainWindow(QtWidgets.QMainWindow, ui):
         pass
 
     def about(self):
-        pass
+        QtWidgets.QMessageBox.about(self, "About {}".format(__title__),
+            """<b>{} v{}</b>
+            <p>&copy; 2017.
+            <p>{}
+            <p>Python {} - Qt {} - PyQt {} on {}""".format(
+                __title__, __version__, __description__,
+                platform.python_version(), QT_VERSION_STR, PYQT_VERSION_STR,
+                platform.system())
+        )
 
     def test(self):
         pass

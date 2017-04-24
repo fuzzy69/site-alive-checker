@@ -1,4 +1,4 @@
 # -*- coding: UTF-8 -*-
 # !/usr/bin/env python
 
-__version__ = "0.4.15.1"
+__version__ = "0.4.24.1"
