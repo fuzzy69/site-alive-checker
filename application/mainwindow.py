@@ -1,6 +1,8 @@
 # -*- coding: UTF-8 -*-
 # !/usr/bin/env python
 
+import csv
+import json
 import os
 import platform
 import webbrowser
@@ -8,7 +10,7 @@ from queue import Queue
 
 from PyQt5 import uic, QtWidgets
 from PyQt5.QtCore import (Qt, QSettings, QThread, QTimer, pyqtSlot, pyqtSignal,
-    QT_VERSION_STR, PYQT_VERSION_STR)
+    QT_VERSION_STR, PYQT_VERSION_STR, QItemSelectionModel)
 from PyQt5.QtGui import (QFont, QStandardItem, QStandardItemModel)
 
 from .conf import ROOT, __author__, __description__, __title__
@@ -41,6 +43,12 @@ class MainWindow(QtWidgets.QMainWindow, ui):
         self.sitesTableView.doubleClicked.connect(self.sitesTableView_doubleClicked)
         self.labelActiveThreads = QtWidgets.QLabel("Active threads: 0")
         self.statusbar.addPermanentWidget(self.labelActiveThreads)
+
+        self.actionRemove_selected.triggered.connect(self.removeSelected)
+        self.actionInvert_selection.triggered.connect(self.invertSelection)
+        self.actionRemove_duplicates.triggered.connect(self.removeDuplicates)
+        self.actionSelect_all.triggered.connect(self.sitesTableView.selectAll)
+
         # Events
         self.resizeEvent = self.onResize
         self.closeEvent = self.onClose
@@ -59,15 +67,15 @@ class MainWindow(QtWidgets.QMainWindow, ui):
         self.timerPulse = QTimer(self)
         self.timerPulse.timeout.connect(self.pulse)
         self.timerPulse.start(1000)
-        # text = readTextFile("data/sites2.txt")
-        # for url in text.strip().splitlines():
-        #     resultCell = QStandardItem("")
-        #     resultCell.setTextAlignment(Qt.AlignCeter)
-        #     codeCell = QStandardItem("")
-        #     codeCell.setTextAlignment(Qt.AlignCenter)
-        #     self.sitesModel.appendRow([QStandardItem(url), resultCell, codeCell])
+        text = readTextFile("data/sites2.txt")
+        for url in text.strip().splitlines():
+            resultCell = QStandardItem("")
+            # resultCell.setTextAlignment(Qt.AlignCeter)
+            codeCell = QStandardItem("")
+            # codeCell.setTextAlignment(Qt.AlignCenter)
+            self.sitesModel.appendRow([QStandardItem(url), resultCell, codeCell])
         self.stopButton.setEnabled(False)
-        self.buttonTest.setVisible(False)
+        # self.buttonTest.setVisible(False)
 
     def centerWindow(self):
         fg = self.frameGeometry()
@@ -163,6 +171,7 @@ class MainWindow(QtWidgets.QMainWindow, ui):
 
     @pyqtSlot(object)
     def onResult(self, result):
+        print(result)
         self.sitesModel.item(result["row"], 1).setFont(self._boldFont)
         # self.sitesModel.item(result["row"], 1).setForeground(Qt.white)
         self.sitesModel.setData(self.sitesModel.index(result["row"], 2), result["status_code"])
@@ -197,6 +206,7 @@ class MainWindow(QtWidgets.QMainWindow, ui):
         for i in range(model.rowCount()):
             model.setData(model.index(i, 1), "")
             model.setData(model.index(i, 2), "")
+        sel
 
     def clearTable(self):
         self.tableRemoveAllRows(self.sitesModel)
@@ -206,7 +216,26 @@ class MainWindow(QtWidgets.QMainWindow, ui):
             model.removeRow(i)
 
     def exportResults(self):
-        pass
+        filePath, fileType = QtWidgets.QFileDialog.getSaveFileName(self, "Export URLs", filter="Text file (*.txt);;CSV file (*.csv);;JSON file (*.json)")
+        model = self.sitesModel
+        data = []
+        for i in range(model.rowCount()):
+            data.append({
+                "URL": model.data(model.index(i, 0)),
+                "Result": model.data(model.index(i, 1)),
+                "Code": model.data(model.index(i, 2)),
+            })
+        if "*.txt" in fileType:
+            with open(filePath, "w") as f:
+                f.write("\n".join([i["URL"] for i in data]))
+        elif "*.csv" in fileType:
+            with open(filePath, "w") as f:
+                w = csv.DictWriter(f, data[0].keys())
+                w.writeheader()
+                w.writerows(data)
+        elif "*.json" in fileType:
+            with open(filePath, "w") as f:
+                f.write(json.dumps(data))
 
     def about(self):
         QtWidgets.QMessageBox.about(self, "About {}".format(__title__),
@@ -221,3 +250,42 @@ class MainWindow(QtWidgets.QMainWindow, ui):
 
     def test(self):
         pass
+
+    def selectedRows(self):
+        rows = set()
+        for index in self.sitesTableView.selectionModel().selectedIndexes():
+            rows.add(index.row())
+
+        return list(rows)
+
+    def removeSelected(self):
+        model = self.sitesModel
+        for i in reversed(self.selectedRows()):
+            model.removeRow(i)
+
+    def removeDuplicates(self):
+        items = []
+        foundDuplicates = False
+        for i in range(self.sitesModel.rowCount()):
+            item = self.sitesModel.data(self.sitesModel.index(i, 0))
+            if item not in items:
+                items.append(item)
+            else:
+                foundDuplicates = True
+        print(items)
+        if foundDuplicates:
+            self.clearTable()
+            for i, item in enumerate(items):
+                self.sitesModel.setData(self.sitesModel.index(i, 0), item)
+
+    def invertSelection(self):
+        # self.sitesTableView.selectAll()
+        selectedRows = self.selectedRows()
+        self.sitesTableView.clearSelection()
+        for i in range(self.sitesModel.rowCount()):
+            if i not in selectedRows:
+                self.sitesTableView.selectRow(i)
+        # for index in self.sitesTableView.selectionModel():
+        #     index.select()
+        #     break
+        # self.sitesTableView.selectionModel().select(self.sitesModel.index(0, 1), QItemSelectionModel.Deselect)

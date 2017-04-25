@@ -11,7 +11,9 @@ from .defaults import TIMEOUT
 def check_alive(url, timeout=TIMEOUT):
     status_code = None
     msg = ''
+    # sleep(0.1)
     try:
+        print(url)
         r = requests.head(url, headers=HEADERS, allow_redirects=True, timeout=timeout)
         if r.status_code != 200:
             r = requests.get(url, headers=HEADERS, allow_redirects=True, timeout=timeout)
@@ -20,7 +22,7 @@ def check_alive(url, timeout=TIMEOUT):
         msg = str(e)
     except Exception as e:
         msg = str(e)
-
+    print(msg)
     return status_code, msg
 
 def split_list(li, n):

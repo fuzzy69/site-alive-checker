@@ -1,5 +1,23 @@
 <RCC>
   <qresource prefix="icons">
+    <file>img/go-jump.png</file>
+    <file>img/applications-accessories.png</file>
+    <file>img/dialog-error.png</file>
+    <file>img/document-open.png</file>
+    <file>img/document-save.png</file>
+    <file>img/edit-clear.png</file>
+    <file>img/edit-cut.png</file>
+    <file>img/help-browser.png</file>
+    <file>img/list-remove.png</file>
+    <file>img/media-playback-pause.png</file>
+    <file>img/media-playback-start.png</file>
+    <file>img/media-playback-stop.png</file>
+    <file>img/network-idle.png</file>
+    <file>img/system-log-out.png</file>
+    <file>img/system-search.png</file>
+    <file>img/system-shutdown.png</file>
+    <file>img/window-new.png</file>
+    <file>img/dialog-error.png</file>
     <file>img/network-idle.png</file>
     <file>img/document-open.png</file>
     <file>img/document-save.png</file>

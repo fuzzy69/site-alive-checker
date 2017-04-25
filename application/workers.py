@@ -3,7 +3,7 @@
 
 from time import sleep
 
-from PyQt5.QtCore import QThread, pyqtSlot, pyqtSignal, QObject
+from PyQt5.QtCore import QThread, pyqtSlot, pyqtSignal, QObject, QMutex
 
 from .utils import check_alive
 
@@ -47,6 +47,7 @@ class Worker(QObject):
 
 class CheckAliveWorker(Worker):
     status = pyqtSignal(tuple)
+    __mutex = QMutex()
 
     def doWork(self, *args, **kwargs):
         queue = kwargs["queue"]
@@ -56,6 +57,7 @@ class CheckAliveWorker(Worker):
             self.status.emit((row, "Checking ..."))
             status_code, msg = check_alive(url, timeout)
             result = True if status_code in [200, 301] else False
+            # CheckAliveWorker.__mutex.lock()
             self.result.emit({
                 "row": row,
                 "url": url,
@@ -63,6 +65,7 @@ class CheckAliveWorker(Worker):
                 "status_code": status_code,
             })
             self.status.emit((row, "Done"))
+            # CheckAliveWorker.__mutex.unlock()
 
     def test(self):
         print("Ok")

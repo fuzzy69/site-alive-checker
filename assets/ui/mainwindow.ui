@@ -21,11 +21,17 @@
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <widget class="QTableView" name="sitesTableView">
+      <property name="autoScroll">
+       <bool>false</bool>
+      </property>
       <property name="editTriggers">
        <set>QAbstractItemView::NoEditTriggers</set>
       </property>
       <property name="alternatingRowColors">
        <bool>true</bool>
+      </property>
+      <property name="selectionMode">
+       <enum>QAbstractItemView::ExtendedSelection</enum>
       </property>
       <property name="selectionBehavior">
        <enum>QAbstractItemView::SelectRows</enum>
@@ -53,7 +59,7 @@
          <number>1</number>
         </property>
         <property name="maximum">
-         <number>10</number>
+         <number>100</number>
         </property>
        </widget>
       </item>
@@ -153,6 +159,7 @@
      <string>Edit</string>
     </property>
     <addaction name="clearTableAction"/>
+    <addaction name="actionRemove_duplicates"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -160,8 +167,17 @@
     </property>
     <addaction name="aboutAction"/>
    </widget>
+   <widget class="QMenu" name="menuSelection">
+    <property name="title">
+     <string>Selection</string>
+    </property>
+    <addaction name="actionSelect_all"/>
+    <addaction name="actionRemove_selected"/>
+    <addaction name="actionInvert_selection"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
+   <addaction name="menuSelection"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -178,11 +194,11 @@
    <addaction name="importUrlsAction"/>
    <addaction name="exportResultsAction"/>
    <addaction name="separator"/>
+   <addaction name="actionRemove_duplicates"/>
    <addaction name="clearTableAction"/>
    <addaction name="separator"/>
-   <addaction name="aboutAction"/>
-   <addaction name="separator"/>
-   <addaction name="quitAction"/>
+   <addaction name="actionRemove_selected"/>
+   <addaction name="actionInvert_selection"/>
   </widget>
   <action name="importUrlsAction">
    <property name="icon">
@@ -205,7 +221,7 @@
   <action name="quitAction">
    <property name="icon">
     <iconset resource="../assets.qrc">
-     <normaloff>:/icons/img/system-log-out.png</normaloff>:/icons/img/system-log-out.png</iconset>
+     <normaloff>:/icons/img/system-shutdown.png</normaloff>:/icons/img/system-shutdown.png</iconset>
    </property>
    <property name="text">
     <string>Quit</string>
@@ -227,6 +243,38 @@
    </property>
    <property name="text">
     <string>About</string>
+   </property>
+  </action>
+  <action name="actionInvert_selection">
+   <property name="icon">
+    <iconset resource="../assets.qrc">
+     <normaloff>:/icons/img/go-jump.png</normaloff>:/icons/img/go-jump.png</iconset>
+   </property>
+   <property name="text">
+    <string>Invert selection</string>
+   </property>
+  </action>
+  <action name="actionRemove_selected">
+   <property name="icon">
+    <iconset resource="../assets.qrc">
+     <normaloff>:/icons/img/dialog-error.png</normaloff>:/icons/img/dialog-error.png</iconset>
+   </property>
+   <property name="text">
+    <string>Remove selected</string>
+   </property>
+  </action>
+  <action name="actionSelect_all">
+   <property name="text">
+    <string>Select all</string>
+   </property>
+  </action>
+  <action name="actionRemove_duplicates">
+   <property name="icon">
+    <iconset resource="../assets.qrc">
+     <normaloff>:/icons/img/applications-accessories.png</normaloff>:/icons/img/applications-accessories.png</iconset>
+   </property>
+   <property name="text">
+    <string>Remove duplicates</string>
    </property>
   </action>
  </widget>
