@@ -67,15 +67,15 @@ class MainWindow(QtWidgets.QMainWindow, ui):
         self.timerPulse = QTimer(self)
         self.timerPulse.timeout.connect(self.pulse)
         self.timerPulse.start(1000)
-        text = readTextFile("data/sites2.txt")
-        for url in text.strip().splitlines():
-            resultCell = QStandardItem("")
-            # resultCell.setTextAlignment(Qt.AlignCeter)
-            codeCell = QStandardItem("")
-            # codeCell.setTextAlignment(Qt.AlignCenter)
-            self.sitesModel.appendRow([QStandardItem(url), resultCell, codeCell])
+        # text = readTextFile("data/sites2.txt")
+        # for url in text.strip().splitlines():
+        #     resultCell = QStandardItem("")
+        #     # resultCell.setTextAlignment(Qt.AlignCeter)
+        #     codeCell = QStandardItem("")
+        #     # codeCell.setTextAlignment(Qt.AlignCenter)
+        #     self.sitesModel.appendRow([QStandardItem(url), resultCell, codeCell])
         self.stopButton.setEnabled(False)
-        # self.buttonTest.setVisible(False)
+        self.buttonTest.setVisible(False)
 
     def centerWindow(self):
         fg = self.frameGeometry()
