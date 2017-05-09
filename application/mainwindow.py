@@ -206,7 +206,6 @@ class MainWindow(QtWidgets.QMainWindow, ui):
         for i in range(model.rowCount()):
             model.setData(model.index(i, 1), "")
             model.setData(model.index(i, 2), "")
-        sel
 
     def clearTable(self):
         self.tableRemoveAllRows(self.sitesModel)
