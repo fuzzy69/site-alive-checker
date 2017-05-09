@@ -12,7 +12,7 @@ from application.mainwindow import MainWindow
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    app.setStyleSheet("QStatusBar::item { border: 0px solid black }; ");
+    app.setStyleSheet("QStatusBar::item { border: 0px solid black }; ")
     mainWindow = MainWindow()
     mainWindow.show()
     app.exec_()
