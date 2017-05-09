@@ -6,7 +6,7 @@ PyQt5 multithreaded application for checking http response status of urls.
 
 ### Screenshot
 
-![Screenshot](screenshots/main.jpg)
+![Screenshot](_/screenshot.gif)
 
 ### Requirements
 
