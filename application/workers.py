@@ -63,6 +63,7 @@ class CheckAliveWorker(Worker):
                 "url": url,
                 "result": result,
                 "status_code": status_code,
+                "msg": msg,
             })
             self.status.emit((row, "Done"))
             # CheckAliveWorker.__mutex.unlock()

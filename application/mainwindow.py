@@ -15,12 +15,14 @@ from PyQt5.QtGui import (QFont, QStandardItem, QStandardItemModel)
 
 from .conf import ROOT, __author__, __description__, __title__
 from .defaults import THREADS, TIMEOUT
-from .helpers import readTextFile
+from .helpers import readTextFile, Logger
 from .utils import check_alive, split_list
 from .version import __version__
 from .workers import Worker, CheckAliveWorker, MyThread
 
+
 ui = uic.loadUiType(os.path.join(ROOT, "assets", "ui", "mainwindow.ui"))[0]
+logger = Logger(__name__)
 
 class MainWindow(QtWidgets.QMainWindow, ui):
     def __init__(self, parent=None):
@@ -147,7 +149,6 @@ class MainWindow(QtWidgets.QMainWindow, ui):
         self._activeThreads = i
 
     def pulse(self):
-        # print("threads: " +str(MyThread.activeCount))
         self.labelActiveThreads.setText("Active threads: {}".format(MyThread.activeCount))
         if MyThread.activeCount == 0:
             if not self.sitesTableView.isSortingEnabled():
@@ -171,16 +172,17 @@ class MainWindow(QtWidgets.QMainWindow, ui):
 
     @pyqtSlot(object)
     def onResult(self, result):
-        print(result)
         self.sitesModel.item(result["row"], 1).setFont(self._boldFont)
         # self.sitesModel.item(result["row"], 1).setForeground(Qt.white)
         self.sitesModel.setData(self.sitesModel.index(result["row"], 2), result["status_code"])
         if result["result"]:
             self.sitesModel.setData(self.sitesModel.index(result["row"], 1), "OK")
             self.sitesModel.item(result["row"], 1).setForeground(Qt.green)
+            logger.info("{} {}".format(result["url"], result["status_code"]))
         else:
             self.sitesModel.setData(self.sitesModel.index(result["row"], 1), "Fail")
             self.sitesModel.item(result["row"], 1).setForeground(Qt.red)
+            logger.info("{} {}".format(result["url"], result["msg"]))
         self._progressDone += 1
         self.progressBar.setValue(int(float(self._progressDone) / self._progressTotal * 100))
 
@@ -271,7 +273,6 @@ class MainWindow(QtWidgets.QMainWindow, ui):
                 items.append(item)
             else:
                 foundDuplicates = True
-        print(items)
         if foundDuplicates:
             self.clearTable()
             for i, item in enumerate(items):
